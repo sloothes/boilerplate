@@ -15,7 +15,7 @@ var APP = {
 
 		var events = {};
 
-		this.dom = document.createElement( 'div' );
+		this.dom = document.createElement( "div" );
 
 		this.width = 500;
 		this.height = 500;
@@ -31,11 +31,24 @@ var APP = {
 			if ( json.project.shadows ) {
 
 				renderer.shadowMap.enabled = true;
-				// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+			//  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 			}
 
 			this.dom.appendChild( renderer.domElement );
+
+            var joysticControls1 = document.createElement( "div" );
+            var joysticControls2 = document.createElement( "div" );
+            joysticControls1.id = "joystick-controls-1";
+            joysticControls2.id = "joystick-controls-2";
+            joysticControls1.classList.add("joystick-controls");
+            joysticControls2.classList.add("joystick-controls");
+
+        //  <div class="joystick-controls" id="joystick-controls-1"></div>
+        //  <div class="joystick-controls" id="joystick-controls-2"></div>
+
+            this.dom.appendChild( joysticControls1 );
+            this.dom.appendChild( joysticControls2 );
 
 			this.setScene( loader.parse( json.scene ) );
 			this.setCamera( loader.parse( json.camera ) );
@@ -55,25 +68,25 @@ var APP = {
 				update: []
 			};
 
-			var scriptWrapParams = 'player,renderer,scene,camera';
+			var scriptWrapParams = "player,renderer,scene,camera";
 			var scriptWrapResultObj = {};
 
 			for ( var eventKey in events ) {
 
-				scriptWrapParams += ',' + eventKey;
+				scriptWrapParams += "," + eventKey;
 				scriptWrapResultObj[ eventKey ] = eventKey;
 
 			}
 
-			var scriptWrapResult = JSON.stringify( scriptWrapResultObj ).replace( /\"/g, '' );
+			var scriptWrapResult = JSON.stringify( scriptWrapResultObj ).replace( /\"/g, "" );
 
 			for ( var uuid in json.scripts ) {
 
-				var object = scene.getObjectByProperty( 'uuid', uuid, true );
+				var object = scene.getObjectByProperty( "uuid", uuid, true );
 
 				if ( object === undefined ) {
 
-					console.warn( 'APP.Player: Script without object.', uuid );
+					console.warn( "APP.Player: Script without object.", uuid );
 					continue;
 
 				}
@@ -84,7 +97,7 @@ var APP = {
 
 					var script = scripts[ i ];
 
-					var functions = ( new Function( scriptWrapParams, script.source + '\nreturn ' + scriptWrapResult + ';' ).bind( object ) )( this, renderer, scene, camera );
+					var functions = ( new Function( scriptWrapParams, script.source + "\nreturn " + scriptWrapResult + ';' ).bind( object ) )( this, renderer, scene, camera );
 
 					for ( var name in functions ) {
 
@@ -92,7 +105,7 @@ var APP = {
 
 						if ( events[ name ] === undefined ) {
 
-							console.warn( 'APP.Player: Event type not supported (', name, ')' );
+							console.warn( "APP.Player: Event type not supported (", name, ")" );
 							continue;
 
 						}
@@ -119,7 +132,8 @@ var APP = {
 
 				if ( camera.parent === null ) {
 
-					// camera needs to be in the scene so camera2 matrix updates
+				//  camera needs to be in the scene 
+                //  so camera2 matrix updates.
 
 					scene.add( camera );
 
@@ -212,14 +226,14 @@ var APP = {
 
 		this.play = function () {
 
-			document.addEventListener( 'keydown', onDocumentKeyDown );
-			document.addEventListener( 'keyup', onDocumentKeyUp );
-			document.addEventListener( 'mousedown', onDocumentMouseDown );
-			document.addEventListener( 'mouseup', onDocumentMouseUp );
-			document.addEventListener( 'mousemove', onDocumentMouseMove );
-			document.addEventListener( 'touchstart', onDocumentTouchStart );
-			document.addEventListener( 'touchend', onDocumentTouchEnd );
-			document.addEventListener( 'touchmove', onDocumentTouchMove );
+			document.addEventListener( "keydown", onDocumentKeyDown );
+			document.addEventListener( "keyup", onDocumentKeyUp );
+			document.addEventListener( "mousedown", onDocumentMouseDown );
+			document.addEventListener( "mouseup", onDocumentMouseUp );
+			document.addEventListener( "mousemove", onDocumentMouseMove );
+			document.addEventListener( "touchstart", onDocumentTouchStart );
+			document.addEventListener( "touchend", onDocumentTouchEnd );
+			document.addEventListener( "touchmove", onDocumentTouchMove );
 
 			dispatch( events.start, arguments );
 
@@ -230,14 +244,14 @@ var APP = {
 
 		this.stop = function () {
 
-			document.removeEventListener( 'keydown', onDocumentKeyDown );
-			document.removeEventListener( 'keyup', onDocumentKeyUp );
-			document.removeEventListener( 'mousedown', onDocumentMouseDown );
-			document.removeEventListener( 'mouseup', onDocumentMouseUp );
-			document.removeEventListener( 'mousemove', onDocumentMouseMove );
-			document.removeEventListener( 'touchstart', onDocumentTouchStart );
-			document.removeEventListener( 'touchend', onDocumentTouchEnd );
-			document.removeEventListener( 'touchmove', onDocumentTouchMove );
+			document.removeEventListener( "keydown", onDocumentKeyDown );
+			document.removeEventListener( "keyup", onDocumentKeyUp );
+			document.removeEventListener( "mousedown", onDocumentMouseDown );
+			document.removeEventListener( "mouseup", onDocumentMouseUp );
+			document.removeEventListener( "mousemove", onDocumentMouseMove );
+			document.removeEventListener( "touchstart", onDocumentTouchStart );
+			document.removeEventListener( "touchend", onDocumentTouchEnd );
+			document.removeEventListener( "touchmove", onDocumentTouchMove );
 
 			dispatch( events.stop, arguments );
 
