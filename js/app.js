@@ -17,6 +17,13 @@ var APP = {
 
 		this.dom = document.createElement( "div" );
 
+        this.joysticControls1 = document.createElement( "div" );
+        this.joysticControls2 = document.createElement( "div" );
+        this.joysticControls1.id = "joystick-controls-1";
+        this.joysticControls2.id = "joystick-controls-2";
+        this.joysticControls1.classList.add("joystick-controls");
+        this.joysticControls2.classList.add("joystick-controls");
+
 		this.width = 500;
 		this.height = 500;
 
@@ -35,20 +42,10 @@ var APP = {
 
 			}
 
+            this.dom.appendChild( this.joysticControls1 );
+            this.dom.appendChild( this.joysticControls2 );
+
 			this.dom.appendChild( renderer.domElement );
-
-            var joysticControls1 = document.createElement( "div" );
-            var joysticControls2 = document.createElement( "div" );
-            joysticControls1.id = "joystick-controls-1";
-            joysticControls2.id = "joystick-controls-2";
-            joysticControls1.classList.add("joystick-controls");
-            joysticControls2.classList.add("joystick-controls");
-
-        //  <div class="joystick-controls" id="joystick-controls-1"></div>
-        //  <div class="joystick-controls" id="joystick-controls-2"></div>
-
-            this.dom.appendChild( joysticControls1 );
-            this.dom.appendChild( joysticControls2 );
 
 			this.setScene( loader.parse( json.scene ) );
 			this.setCamera( loader.parse( json.camera ) );
