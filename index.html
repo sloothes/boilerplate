@@ -74,6 +74,9 @@
 	</head>
 
 	<body ontouchstart="">
+
+        <div id="scene-container"></div>
+
         <script src="js/signals.min.js"></script>
 		<script src="js/three.min.js"></script>
 		<script src="js/app.js"></script>
@@ -103,8 +106,8 @@
 						window.open( "https://sloothes.com/three/r78/editor/#file=" + url + "/app.json" );
 
 					}, false );
-					document.body.appendChild( button );
 
+					document.body.appendChild( button );
 				}
 
 				window.addEventListener( "resize", function () {
@@ -113,6 +116,19 @@
 
 			});
 
+            var joysticControls1 = document.createElement( "div" );
+            var joysticControls2 = document.createElement( "div" );
+            joysticControls1.id = "joystick-controls-1";
+            joysticControls2.id = "joystick-controls-2";
+            joysticControls1.classList.add("joystick-controls");
+            joysticControls2.classList.add("joystick-controls");
+
+            var container = document.getElementById("scene-container");
+
+            container.appendChild( this.joysticControls1 );
+            container.appendChild( this.joysticControls2 );
+
 		</script>
+
 	</body>
 </html>

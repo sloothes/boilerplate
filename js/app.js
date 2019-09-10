@@ -15,14 +15,7 @@ var APP = {
 
 		var events = {};
 
-		this.dom = document.createElement( "div" );
-
-        this.joysticControls1 = document.createElement( "div" );
-        this.joysticControls2 = document.createElement( "div" );
-        this.joysticControls1.id = "joystick-controls-1";
-        this.joysticControls2.id = "joystick-controls-2";
-        this.joysticControls1.classList.add("joystick-controls");
-        this.joysticControls2.classList.add("joystick-controls");
+		this.dom = document.getElementById( "scene-container" );
 
 		this.width = 500;
 		this.height = 500;
@@ -41,9 +34,6 @@ var APP = {
 			//  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 			}
-
-            this.dom.appendChild( this.joysticControls1 );
-            this.dom.appendChild( this.joysticControls2 );
 
 			this.dom.appendChild( renderer.domElement );
 
