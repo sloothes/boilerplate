@@ -23,7 +23,6 @@ var APP = {
 		this.load = function ( json ) {
 
 			vr = json.project.vr;
-            debugMode = json.project.debugMode;
 
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setClearColor( 0x000000 );
@@ -107,6 +106,8 @@ var APP = {
 			}
 
 			dispatch( events.init, arguments );
+
+            debugMode = json.project.debugMode;
 
 		};
 
