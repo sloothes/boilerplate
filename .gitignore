@@ -1,2 +1,4 @@
 
 *.zip
+poses/*
+animations/*
