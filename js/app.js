@@ -11,7 +11,7 @@ var APP = {
 		var loader = new THREE.ObjectLoader();
 		var camera, scene, renderer;
 
-		var vr, controls, effect;
+		var vr, debugMode, controls, effect;
 
 		var events = {};
 
@@ -23,6 +23,7 @@ var APP = {
 		this.load = function ( json ) {
 
 			vr = json.project.vr;
+            debugMode = json.project.debugMode;
 
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setClearColor( 0x000000 );

@@ -79,6 +79,7 @@
 
         <script src="js/signals.min.js"></script>
 		<script src="js/three.min.js"></script>
+		<script src="js/EditorControls.js"></script>
 		<script src="js/app.js"></script>
 		
 		<script>
@@ -87,6 +88,8 @@
 			loader.load( "app.json", function ( text ) {
 
 				var json = JSON.parse( text );
+                
+                debugMode = json.project.debugMode; // important!
 
 				var player = new APP.Player();
 				player.load( json );
@@ -116,17 +119,21 @@
 
 			});
 
-            var joysticControls1 = document.createElement( "div" );
-            var joysticControls2 = document.createElement( "div" );
-            joysticControls1.id = "joystick-controls-1";
-            joysticControls2.id = "joystick-controls-2";
-            joysticControls1.classList.add("joystick-controls");
-            joysticControls2.classList.add("joystick-controls");
+            (function(){
 
-            var container = document.getElementById("scene-container");
+                var joysticControls1 = document.createElement( "div" );
+                var joysticControls2 = document.createElement( "div" );
+                joysticControls1.id = "joystick-controls-1";
+                joysticControls2.id = "joystick-controls-2";
+                joysticControls1.classList.add("joystick-controls");
+                joysticControls2.classList.add("joystick-controls");
 
-            container.appendChild( this.joysticControls1 );
-            container.appendChild( this.joysticControls2 );
+                var container = document.getElementById("scene-container");
+
+                container.appendChild( joysticControls1 );
+                container.appendChild( joysticControls2 );
+
+            })();
 
 		</script>
 
