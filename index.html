@@ -69,6 +69,8 @@
 
 				console.log( "[manager]", "Loading completed." );
 
+		//		Remove.
+
 				setTimeout(function(){
 					var dialog = document.getElementById("loading-dialog");
 					dialog.style.display = "none"; dialog.remove();
@@ -130,12 +132,6 @@
 					player.setSize( window.innerWidth, window.innerHeight );
 				});
 
-		//		Remove dialog.
-
-				setTimeout(function(){
-					var dialog = document.getElementById("loading-dialog");
-					dialog.style.display = "none"; dialog.remove();
-				}, 1000);
 
 			}, function onProgress( e ){
 
