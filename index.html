@@ -66,7 +66,6 @@
 
 				var loadholder = document.getElementById("loaded");
 				loadholder.textContent = "completed";
-				console.log( "loadholder:", loadholder );
 
 				console.log( "[manager]", "Loading completed." );
 
@@ -156,7 +155,6 @@
 					var total = 734445; // (in bytes)
 					var percent = (e.loaded / total) * 100;
 					loadholder.textContent = percent.toFixed(0) + "%";
-					console.log( "loadholder:", loadholder );
 
 				}
 
