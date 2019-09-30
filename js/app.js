@@ -25,7 +25,7 @@ var APP = {
 
 		this.load = function ( json ) {
 
-			console.clear(); // debug!
+		//	console.clear(); // debug!
 
 			vr = json.project.vr;
 
