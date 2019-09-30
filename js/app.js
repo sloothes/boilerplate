@@ -9,36 +9,80 @@ var APP = {
 		var scope = this;
 
 		var loader = new THREE.ObjectLoader();
+
 		var camera, scene, renderer;
 
-		var vr, controls, effect;
+		var vr, controls, effect, center;
 
 		var events = {};
 
-		this.dom = document.getElementById( "scene-container" );
+		this.dom = document.createElement( "div" );
 
 		this.width = 500;
 		this.height = 500;
 
+	//	Load app.json.
+
 		this.load = function ( json ) {
+
+			console.clear(); // debug!
 
 			vr = json.project.vr;
 
-			renderer = new THREE.WebGLRenderer( { antialias: true } );
+			debugMode = json.project.debugMode; // (global) important! 
+
+			THREE.Cache.enabled = json.project.cache; // important!
+
+			console.log({ "vr": vr, "debugMode": debugMode, "cache": THREE.Cache.enabled });
+
+
+		//	Load external javascirpt libraries.
+
+			if ( json.javascripts && json.javascripts.length > 0 ) {
+
+				var javascripts = json.javascripts.map( parseScript );
+				debugMode && console.log( "javascripts:", javascripts );
+
+				while ( javascripts.length ) {
+
+					var object = javascripts.shift(); // important!
+					var script = new Function( "scope", object.source );
+					script.bind( window ).call(); // bind and execute.
+					console.log("Library", object.name, "loaded.");
+
+				}
+
+				function parseScript( item ){ 
+					return {
+						name: item.name,
+						source: JSON.parse( item.source ) // important!
+					};
+				}
+
+			}
+
+		//	Player renderer.
+
+			renderer = new THREE.WebGLRenderer({ 
+				antialias: true,
+				preserveDrawingBuffer: true,
+            });
+
 			renderer.setClearColor( 0x000000 );
 			renderer.setPixelRatio( window.devicePixelRatio );
 
 			if ( json.project.shadows ) {
 
 				renderer.shadowMap.enabled = true;
-			//  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+			//	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 			}
 
 			this.dom.appendChild( renderer.domElement );
-
 			this.setScene( loader.parse( json.scene ) );
 			this.setCamera( loader.parse( json.camera ) );
+
+		//  If editor controls always after setCamera(); important!
 
 			events = {
 				init: [],
@@ -55,7 +99,7 @@ var APP = {
 				update: []
 			};
 
-			var scriptWrapParams = "player,renderer,scene,camera";
+			var scriptWrapParams = "player,renderer,scene,camera,controls";
 			var scriptWrapResultObj = {};
 
 			for ( var eventKey in events ) {
@@ -73,8 +117,9 @@ var APP = {
 
 				if ( object === undefined ) {
 
-					console.warn( "APP.Player: Script without object.", uuid );
-					continue;
+					console.warn( "APP.Player: Script without object.", uuid ); 
+
+				//	continue;
 
 				}
 
@@ -84,7 +129,7 @@ var APP = {
 
 					var script = scripts[ i ];
 
-					var functions = ( new Function( scriptWrapParams, script.source + "\nreturn " + scriptWrapResult + ';' ).bind( object ) )( this, renderer, scene, camera );
+					var functions = ( new Function( scriptWrapParams, script.source + "\nreturn " + scriptWrapResult + ";" ).bind( object ) )( this, renderer, scene, camera, controls );
 
 					for ( var name in functions ) {
 
@@ -92,7 +137,8 @@ var APP = {
 
 						if ( events[ name ] === undefined ) {
 
-							console.warn( "APP.Player: Event type not supported (", name, ")" );
+							console.warn( "APP.Player: Event type not supported (", name, ")" ); 
+
 							continue;
 
 						}
@@ -107,9 +153,40 @@ var APP = {
 
 			dispatch( events.init, arguments );
 
-            debugMode = json.project.debugMode;
+		};
+
+	//	Execute script in window scope.
+
+		this.setLibrary = function() {
+
+		//  arguments: soucre code (text) only.
+
+			for (var i in arguments){
+
+				var script = new Function("scope", arguments[ i ]); 
+				script.bind( window ).call(); // bind and execute script.
+				debugMode && console.log("Library", script.toString(), "executed.");
+
+			}
 
 		};
+
+	//	Load js libraries.
+
+		this.loadLibrary = function(){
+
+			var loader = new THREE.XHRLoader();
+
+			for ( var i in arguments ){
+
+				loader.load( arguments[i], this.setLibrary );
+				console.log( "Library", arguments[i], "loaded.");
+
+			}
+
+		};
+
+	//
 
 		this.setCamera = function ( value ) {
 
@@ -121,8 +198,7 @@ var APP = {
 
 				if ( camera.parent === null ) {
 
-				//  camera needs to be in the scene 
-                //  so camera2 matrix updates.
+				//	camera needs to be in the scene so camera2 matrix updates.
 
 					scene.add( camera );
 
@@ -160,15 +236,19 @@ var APP = {
 
 		this.setSize = function ( width, height ) {
 
-			if ( renderer._fullScreen ) return;
+			if ( renderer && renderer._fullScreen ) return;
 
 			this.width = width;
 			this.height = height;
 
-			camera.aspect = this.width / this.height;
-			camera.updateProjectionMatrix();
+            if ( camera ) {
 
-			renderer.setSize( width, height );
+                camera.aspect = this.width / this.height;
+                camera.updateProjectionMatrix();
+
+            }
+
+			if ( renderer ) renderer.setSize( width, height );
 
 		};
 
@@ -260,7 +340,7 @@ var APP = {
 
 		};
 
-		//
+	//
 
 		function onDocumentKeyDown( event ) {
 
