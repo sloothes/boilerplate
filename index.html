@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-		<title>boilerplate (v4.2.1)</title>
+		<title>boilerplate in-a-box (v4.2.2)</title>
 
 		<link rel="stylesheet" href="/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/css/bootbox-dialoges.css">
@@ -34,7 +34,7 @@
 	<body ontouchstart="">
 
 		<script src="js/app.js"></script>
-		<script src="js/three.js"></script>
+		<script src="/three/three.js"></script>
 
 		<!-- includes -->
 
@@ -45,12 +45,12 @@
 			//  Loading dialog.
 
 				var loadingDialog = document.createElement("div");
-				loadingDialog.id = "loading-dialog";
+				loadingDialog.id = "loading-dialog"
 				loadingDialog.classList.add("middle", "text-center");
 				loadingDialog.style.cssText = "position:absolute;top:0;left:0;bottom:0;right:0;background:none;z-index:9999;";
 
 				var dialogContent = document.createElement("h2");
-				dialogContent.style.cssText = "width:fit-content;font-weight:bold;color:#fff;text-align:center;";
+				dialogContent.style.cssText = "width:fit-content;font-weight:bold;color:#fff;text-align:center;"
 				dialogContent.innerHTML = "Please wait..." + "<br>" + "Loading... " + "<span id=\"loaded\"></span>" + "<br>" + "(heavy duty)";
 
 				loadingDialog.appendChild( dialogContent );
@@ -132,7 +132,7 @@
 					player.setSize( window.innerWidth, window.innerHeight );
 				});
 
-
+				
 			}, function onProgress( e ){
 
 				var loadholder = document.getElementById("loaded");
@@ -152,7 +152,7 @@
 
 					console.log( "on progress:", e.loaded, "bytes loaded." );
 
-					var total = 734445; // (in bytes)
+					var total = 734585; // (in bytes)
 					var percent = (e.loaded / total) * 100;
 					loadholder.textContent = percent.toFixed(0) + "%";
 
